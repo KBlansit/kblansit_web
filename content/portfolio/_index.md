@@ -3,4 +3,4 @@ title: PORTFOLIO
 description: 'Portfolio Section'
 ---
 
-You'll add here a general introduction of your portfolio page.
+Highlights of some of the machine learning and healthcare technology.
