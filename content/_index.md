@@ -5,6 +5,6 @@ images: ["/images/sample.jpg"]
 ---
 
 Hi!
-My name is Kevin Blansit. This is my portfolio, highlighting various projects in machine learning and healthcare technology.
+My name is Kevin Blansit. This is my portfolio, highlighting various projects in machine learning, data science, and healthcare technology.
 
 [Get to know more about me](/about "Get to know me better")

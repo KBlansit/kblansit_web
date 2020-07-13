@@ -10,10 +10,10 @@ pygmentsCodeFences=true
 
 [params.intro]
   main = "Kevin Blansit"
-  sub = "Expierenced Ph.D. machine learning engineer"
+  sub = "Expierenced Ph.D. machine learning engineer and data scientist"
 
 [params.main]
-  latestPublishHeader = "My Latest Project"
+  latestPublishHeader = "Latest Project"
 
 [taxonomies]
   design = "designs"
@@ -65,18 +65,25 @@ pygmentsCodeFences=true
   weight = -120
 
 [[menu.main]]
+  identifier = "resume"
+  name = "Résumé/CV"
+  title = "Résumé/CV"
+  url = "/resume/"
+  weight = -110
+
+[[menu.main]]
   identifier = "portfolio"
   name = "Portfolio"
   title = "Portfolio"
   url = "/portfolio/"
-  weight = -110
+  weight = -100
 
 [[menu.main]]
   identifier = "blog"
   name = "Post"
   title = "Blog section"
   url = "/post/"
-  weight = -100
+  weight = -90
 
 [sitemap]
   changefreq = "monthly"
