@@ -1,15 +1,14 @@
 ---
-title: Cardiac MRI Autopilot – Proof of Concept
-description: Initial proof of concept for localizing cardiac landmarks
+title: Surgi Screen (Alexa for Healthcare)
+description:
 date: "2019-05-02T19:47:09+02:00"
 jobDate: 2018
-work: [design, architecture]
+work: [cardiac MRI, healthcare]
 techs: [python, Keras, tensorflow]
 designs: [Deep Learning, cardiac MRI, Heatmap Localization]
 thumbnail: cmri_proof_of_concept/proof_of_concept.png
 projectUrl: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6884027/
 ---
-
 
 Cardiac MRI is an advanced imaging technique to understand heart health. Despite the medical utility of this technology, it's accessibility is often limited due to the complex anatomy of the heart, and difficulty in training technologists to acquire high quality images.
 
