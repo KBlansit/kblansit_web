@@ -6,7 +6,7 @@ jobDate: 2018
 work: [design, architecture]
 techs: [python, Keras, tensorflow]
 designs: [Deep Learning, cardiac MRI, Heatmap Localization]
-thumbnail: sample-project/proof_of_concept.png
+thumbnail: cmri_proof_of_concept/proof_of_concept.png
 projectUrl: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6884027/
 ---
 
