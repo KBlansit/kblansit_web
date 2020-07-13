@@ -1,11 +1,11 @@
 ---
-title: Cardiac MRI Autopilot – Proof of Concept
+title: Surgi Screen (Alexa for Healthcare)
 description: Initial proof of concept for localizing cardiac landmarks
 date: "2019-05-02T19:47:09+02:00"
 jobDate: 2018
-work: [surgery, healthcare]
+work: [Surgery, Healthcare]
 techs: [python, Alexa, flask]
-designs: [Human interaction, health interoperability, ]
+designs: [Human Interaction, Health Interoperability]
 thumbnail: surgi_screen/black_alexa.jpg
 projectUrl: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5977698/
 ---

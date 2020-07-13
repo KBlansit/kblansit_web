@@ -1,11 +1,11 @@
 ---
-title: Surgi Screen (Alexa for Healthcare)
+title: Cardiac MRI Autopilot – Proof of Concept
 description:
 date: "2019-05-02T19:47:09+02:00"
 jobDate: 2018
-work: [cardiac MRI, healthcare]
+work: [Cardiac MRI, Healthcare]
 techs: [python, Keras, tensorflow]
-designs: [Deep Learning, cardiac MRI, Heatmap Localization]
+designs: [Deep Learning, Cardiac MRI, Heatmap Localization]
 thumbnail: cmri_proof_of_concept/proof_of_concept.png
 projectUrl: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6884027/
 ---
