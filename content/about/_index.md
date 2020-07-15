@@ -14,4 +14,4 @@ I decided to then pursue formal graduate level education in utilizing healthcare
 
 More recently, I am finishing my Ph.D. at UC San Diego’s Bioinformatics program, focusing my thesis work on developing a cardiac MRI ‘autopilot’, meant to integrate and automate with cardiac MRI workflows. I developed a series of Deep Convolutional Neural Networks to localize the cardiac landmarks that define the standard cardiac views. This range of my worked transcends from developing novel deep learning algorithms to implementing my work into a fully functional clinical prototype.
 
-In my free time, I enjoy running, home brewing, cooking, and building computers.
+In my free time, I enjoy running, home brewing, cooking, and thinkering with computers.
