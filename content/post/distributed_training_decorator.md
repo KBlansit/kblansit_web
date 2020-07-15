@@ -4,13 +4,28 @@ description: My foray into Keras data distributed training and why we need more 
 date: "2019-05-02T19:25:30+02:00"
 publishDate: "2019-05-02T19:25:30+02:00"
 ---
+#### todo:
+# add video
+# copy edit
+# add active learning part
 **Introduction**
 
-I was recently allocated an Azure instance, with 4 K80s for some of my cardiac MRI Autopilot research. This has given me the unique opportunity to experiment with the newer Keras data distributed GPU methods, and think about how to integrate some basic python software engineering best practices into training. More specifically, I will cover how to first set up an initial distributed GPU training using data parallelism, how to allow reimportation of a prior trained model, and how to do these things in a more pythonic manor.
+I was recently allocated an Azure instance, with 4 K80s for some of my cardiac MRI Autopilot research. This has given me the unique opportunity to experiment with the newer Keras data distributed GPU methods, and think about how to integrate some basic python software engineering best practices into training. In this post, I will first cover how to train with multiple GPUs using distributed data strategy. Then, I will cover how to load a previously trained model, within the same scope (things get tricky here!). Finally, I will show how to clean up the code using decorators, proving more pythonic and extensible code design patterns. I will moreover link to the python scripts that I used for this.
+
+**Versions**
+
+In this post, I will be using the following libraries and version.
+- tensorflow-gpu==1.14.0
+- keras==2.3.0
+- CUDA==10.0
+- NVIDIA-Drivers==450.36.06
+- Ubuntu==18.04.4
 
 **Distributed Training with Data Parallelism**
 
 To start out with, let’s make a python script for distributed training with data parallelism. I decided to use the MNIST dataset since it’s opensource, free, and lightweight, and allows us to verify everything is working as it should be. I have four primary function here that will form the basis for our work.
+
+[initial_distributed_gpu_training.py](https://github.com/KBlansit/keras_gpu_distributed_example/blob/master/initial_distributed_gpu_training.py)
 
 ``` python
 def load_minst_data():
@@ -182,6 +197,7 @@ Finally, let us fit our model, and save the model as a .h5 file. Great! We can n
 
 Now let us try to load our prior model in distributed GPU mode. There are many reasons to want to pick up a prior trained Keras model, and resume training.  For one, maybe we want to do transfer learning with a prior trained mode? Or maybe our system had a fault halfway through, and we want to resume training without starting all over again. So, lets ignore for a moment our custom scope logic, and just assume for the moment we can do distributed training.
 
+[bad_load_model.py](https://github.com/KBlansit/keras_gpu_distributed_example/blob/master/bad_load_model.py)
 
 ``` python
 # make a learning strategy and open scope for compiling model
@@ -231,6 +247,8 @@ What are decorators? They’re just a simple way of encapsulating custom functio
 [Using Decorators For Fizz Buzz.](https://ryxcommar.com/2019/07/20/fizzbuzz-redux/)
 
 I will admit I put off learning more about them due to the scary syntactic sugar, but after learning that they’re just a function returning a function, they are clearly a useful addition to extend reusable code.
+
+[load_model_multi_gpu.py](https://github.com/KBlansit/keras_gpu_distributed_example/blob/master/load_model_multi_gpu.py)
 
 ``` python
 def load_model_with_scope(model_func):
