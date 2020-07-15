@@ -19,7 +19,7 @@ In this post, I will be using the following libraries and version.
 
 **Distributed Training with Data Parallelism**
 
-To start out with, let’s make a python script for distributed training with data parallelism. I decided to use the MNIST dataset since it’s opensource, free, and lightweight, and allows us to verify everything is working as it should be. I have four primary function here that will form the basis for our work.
+To start out with, let’s make a python script for distributed training with data parallelism. I decided to use the MNIST dataset since it’s opensource, free, lightweight, and allows us to verify everything is working as it should be. I have four primary function here that will form the basis for our work.
 
 [initial_distributed_gpu_training.py](https://github.com/KBlansit/keras_gpu_distributed_example/blob/master/initial_distributed_gpu_training.py)
 
@@ -50,7 +50,7 @@ def load_minst_data():
     # return data
     return x_train, y_train, x_test, y_test
 ```
-This function is self-explanatory and will admit that I borrowed heavily from the Keras MNIST tutorial. However, I personally like to separate my loading data logic into a function.
+This function is fairly self-explanatory. I borrowed heavily from the Keras MNIST tutorial. However, I personally like to separate my loading data logic into a function.
 
 ``` python
 def make_datasets(x_input, y_input,
@@ -189,9 +189,20 @@ Now that we have our functions, we can return our data. However, for our model, 
 
 Finally, let us fit our model, and save the model as a .h5 file. Great! We can now train a model with multiple GPUs.
 
+``` python
+# fit model
+model.fit(
+    train_dataset,
+    steps_per_epoch=train_parallel_steps,
+    epochs=EPOCHS,
+    validation_data=test_dataset,
+    validation_steps=test_parallel_steps,
+)
+```
+
 **Reloading Keras model into Data Distributed Strategy**
 
-Now let us try to load our prior model in distributed GPU mode. There are many reasons to want to pick up a prior trained Keras model, and resume training.  For one, maybe we want to do transfer learning with a prior trained mode? Or maybe our system had a fault halfway through, and we want to resume training without starting all over again. So, lets ignore for a moment our custom scope logic, and just assume for the moment we can do distributed training.
+Now let us try to load our prior model in distributed GPU mode. There are many reasons to want to pick up a prior trained Keras model, and resume training.  For one, maybe we want to do transfer learning with a prior trained mode? Or maybe our system had a fault halfway through, and we want to resume training without starting all over again. Heck, we could want to do active learning to enhance our productivity! So, lets ignore for a moment our custom scope logic, and just assume for the moment we can do distributed training.
 
 [bad_load_model.py](https://github.com/KBlansit/keras_gpu_distributed_example/blob/master/bad_load_model.py)
 
@@ -208,7 +219,8 @@ with strategy.scope():
 
 :anguished: Huh??? Um, well that’s awkward! Maybe this sorta makes sense, given that we know that the model must be compiled in the strategy scope. After *quite* a bit of googling, I couldn’t find a simple answer. :unamused:
 
-:thinking:However, we know that a Keras model has the methods get_model_weights() and set_model_weight()!
+:thinking:
+However, we know that a Keras model has the methods get_model_weights() and set_model_weight()!
 What we can do is load the prior model onto our RAM (rather GPU memory), get the model weights as a list of numpy arrays. We can then recompile a fresh model within the correct strategy scope, and simply load the model weights.
 
 
@@ -308,6 +320,6 @@ However, the logic between the two decorators is abstracted from one another. Fo
 
 **Final Thoughts**
 
-I hope this post helps make the case for machine learning engineers to become more familiar with more advanced topics in python programing. Often time, the emphasis of our field is on developing new and exotic model structures. However, there’s a good case to be made that enhancing machine learning organization can be done with well written code. There’s a certain aesthetic and pride one can get from developing in a world that tries so hard to break design patterns. Not only can we extend logic, we can make code easier to manage, and easier to design experiments.
+I hope this post helps make the case for machine learning engineers to become more familiar with more advanced topics in python programing. Often time, the emphasis of our field is on developing new and exotic model structures. However, there’s a good case to be made that enhancing machine learning productivity can be accomplished with well written code. There’s a certain aesthetic and pride one can get from developing in a world that tries so hard to break design patterns. Not only can we extend logic, we can make code easier to manage, and easier to design experiments.
 
 I do think there are further things I could do to further modularize my code. I certainly could extend decorator logic to extend my functions returning my datasets, so I can automatically create TensorFlow datasets. That said, I hope my code example provides an interesting perspective in how to plan for reusable code in machine learning engineering.
