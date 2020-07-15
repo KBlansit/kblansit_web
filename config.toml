@@ -1,4 +1,5 @@
-baseURL = "https://example.com/"
+# set it to blank for now... change later potentially
+baseURL = ""
 languageCode = "en-us"
 title = "Kevin Blansit"
 theme = "personal-web"
