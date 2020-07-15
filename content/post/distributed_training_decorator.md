@@ -4,10 +4,6 @@ description: My foray into Keras data distributed training and why we need more 
 date: "2019-05-02T19:25:30+02:00"
 publishDate: "2019-05-02T19:25:30+02:00"
 ---
-#### todo:
-# add video
-# copy edit
-# add active learning part
 **Introduction**
 
 I was recently allocated an Azure instance, with 4 K80s for some of my cardiac MRI Autopilot research. This has given me the unique opportunity to experiment with the newer Keras data distributed GPU methods, and think about how to integrate some basic python software engineering best practices into training. In this post, I will first cover how to train with multiple GPUs using distributed data strategy. Then, I will cover how to load a previously trained model, within the same scope (things get tricky here!). Finally, I will show how to clean up the code using decorators, proving more pythonic and extensible code design patterns. Exemplar code snippets and scripts will be linked below.
