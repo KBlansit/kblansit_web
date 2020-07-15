@@ -8,12 +8,9 @@ publishDate: "2019-05-02T19:25:30+02:00"
 
 I was recently allocated an Azure instance, with 4 K80s for some of my cardiac MRI Autopilot research. This has given me the unique opportunity to experiment with the newer Keras data distributed GPU methods, and think about how to integrate some basic python software engineering best practices into training. More specifically, I will cover how to first set up an initial distributed GPU training using data parallelism, how to allow reimportation of a prior trained model, and how to do these things in a more pythonic manor.
 
-
 **Distributed Training with Data Parallelism**
 
 To start out with, let’s make a python script for distributed training with data parallelism. I decided to use the MNIST dataset since it’s opensource, free, and lightweight, and allows us to verify everything is working as it should be. I have four primary function here that will form the basis for our work.
-
-
 
 ``` python
 def load_minst_data():
@@ -89,6 +86,7 @@ def calculate_train_and_valid_steps(buffer_size, batch_size):
 
     return num_of_steps
 ```
+
 Since we don’t know the batch size across the multiple GPUs, we instead just want to iterate over a specified number of steps to ensure we have our proper batch size. I like to think of it similar to when your data is from a data generator, where we need to return our data in batch form.
 
 ``` python
@@ -132,6 +130,7 @@ def cnn_model():
     # return model
     return model
 ```
+
 Just a very generic and basic Convolutional Neural Network, and just helps make our code organization better. Plus as you will soon come to see, we can use decorators to modify our model function.
 
 ``` python
@@ -192,9 +191,12 @@ print("Number of devices: {}.".\
 with strategy.scope():
     model = load_model(PREV_MODEL_PATH)
 ```
-Huh??? Um, well that’s awkward! Maybe this sorta makes sense, given that we know that the model must be compiled in the strategy scope. After *quite* a bit of googling, I couldn’t find a simple answer.
 
-However, we know that a Keras model has the methods get_model_weights() and set_model_weight()!
+![Drat!](/post/images/distributed_bad_loading_keras_model.png)
+
+:anguished: Huh??? Um, well that’s awkward! Maybe this sorta makes sense, given that we know that the model must be compiled in the strategy scope. After *quite* a bit of googling, I couldn’t find a simple answer. :unamused:
+
+:thinking:However, we know that a Keras model has the methods get_model_weights() and set_model_weight()!
 What we can do is load the prior model onto our RAM (rather GPU memory), get the model weights as a list of numpy arrays. We can then recompile a fresh model within the correct strategy scope, and simply load the model weights.
 
 
@@ -215,17 +217,20 @@ with strategy.scope():
     model = cnn_model()
 ```
 
+![Drat!](/post/images/distributed_good_loading_keras_model.png)
+
 This works! :smile:
 
 However, lets be honest. This code is starting to look messy. And what if we want to keep our custom scope depending on what computer we’re on? That logic would start getting ugly. I think this is an excellent use case for decorators.
 
 **Decorators**
 
-What are decorators? They’re just a simple way of encapsulating custom function logic within another function. I won’t go too much into the specifics of decorators here because I think there’s some great other examples that are worth your time . I will admit I put off learning more about them due to the scary syntactic sugar, but after learning that they’re just a function returning a function, they are clearly a useful addition to extend reusable code.
+What are decorators? They’re just a simple way of encapsulating custom function logic within another function. I won’t go too much into the specifics of decorators here because I think there’s some great other examples that are worth your time.
+[Basic Python Decorators.](https://realpython.com/primer-on-python-decorators/)
+[Decorator Functions with Decorator Arguments.](https://www.artima.com/weblogs/viewpost.jsp?thread=240845#decorator-functions-with-decorator-arguments)
+[Using Decorators For Fizz Buzz.](https://ryxcommar.com/2019/07/20/fizzbuzz-redux/)
 
-
-
-
+I will admit I put off learning more about them due to the scary syntactic sugar, but after learning that they’re just a function returning a function, they are clearly a useful addition to extend reusable code.
 
 ``` python
 def load_model_with_scope(model_func):
@@ -290,3 +295,5 @@ However, the logic between the two decorators is abstracted from one another. Fo
 **Final Thoughts**
 
 I hope this post helps make the case for machine learning engineers to become more familiar with more advanced topics in python programing. Often time, the emphasis of our field is on developing new and exotic model structures. However, there’s a good case to be made that enhancing machine learning organization can be done with well written code. There’s a certain aesthetic and pride one can get from developing in a world that tries so hard to break design patterns. Not only can we extend logic, we can make code easier to manage, and easier to design experiments.
+
+I do think there are further things I could do to further modularize my code. I certainly could extend decorator logic to extend my functions returning my datasets, so I can automatically create TensorFlow datasets. That said, I hope my code example provides an interesting perspective in how to plan for reusable code in machine learning engineering.
