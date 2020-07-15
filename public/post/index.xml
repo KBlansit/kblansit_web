@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>POST on Kevin Blansit</title>
+    <link>/post/</link>
+    <description>Recent content in POST on Kevin Blansit</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 02 May 2019 19:25:30 +0200</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Why Machine Learning Engineers Should Use Decorators</title>
+      <link>/post/distributed_training_decorator/</link>
+      <pubDate>Thu, 02 May 2019 19:25:30 +0200</pubDate>
+      
+      <guid>/post/distributed_training_decorator/</guid>
+      <description>Introduction
+I was recently allocated an Azure instance, with 4 K80s for some of my cardiac MRI Autopilot research. This has given me the unique opportunity to experiment with the newer Keras data distributed GPU methods, and think about how to integrate some basic python software engineering best practices into training. In this post, I will first cover how to train with multiple GPUs using distributed data strategy. Then, I will cover how to load a previously trained model, within the same scope (things get tricky here!</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>flask on Kevin Blansit</title>
+    <link>/techs/flask/</link>
+    <description>Recent content in flask on Kevin Blansit</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 02 May 2019 19:47:09 +0200</lastBuildDate>
+    
+	<atom:link href="/techs/flask/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Surgi Screen (Alexa for Healthcare)</title>
+      <link>/portfolio/surgi_screen/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/portfolio/surgi_screen/</guid>
+      <description>For a Robotics in Healthcare class I took from UC San Diego&amp;rsquo;s CS department, our term project was to design and prototype a healthcare technology. Given my background in healthcare, I knew of the importance health systems were placing on developing post surgical monitoring programs, such as hiring nurses to monitor patients after they were discharged to their homes. However, these programs are often highly labor intensive, and therefore often difficult to implement.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cardiac MRI on Kevin Blansit</title>
+    <link>/designs/cardiac-mri/</link>
+    <description>Recent content in Cardiac MRI on Kevin Blansit</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 02 May 2019 19:47:09 +0200</lastBuildDate>
+    
+	<atom:link href="/designs/cardiac-mri/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Cardiac MRI Autopilot – Proof of Concept</title>
+      <link>/portfolio/cmri_proof_of_concept/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/portfolio/cmri_proof_of_concept/</guid>
+      <description>Cardiac MRI is an advanced imaging technique to understand heart health. Despite the medical utility of this technology, it&amp;rsquo;s accessibility is often limited due to the complex anatomy of the heart, and difficulty in training technologists to acquire high quality images.
+In this work, I therefore developed a deep learning (AI) based approach to automate these scans. Using several hundred scans, I developed 2D and 3D deep learning models in Keras (with tensorflow) to localize the cardiac landmarks that define the standard cardiac views.</description>
+    </item>
+    
+    <item>
+      <title>Uncertainty Sampling for Heatmap Localization</title>
+      <link>/portfolio/uncertainty_sampling/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/portfolio/uncertainty_sampling/</guid>
+      <description>While there have been prior examinations of using uncertainty sampling for Deep Convolutional Neural Networks, this prior work has been limited to problems like classification. However for my problem of localization, there has not been generalization of these approaches for my problem of heatmap localization.
+In this work, I examine three different strategies for measuring Deep Convolutional Neural Network uncertainty; 1) pseudoprobability maximum based off the Deep Convolutional Neural Network activation, 2) spatial variance of rotational entropy based off augmentations of the test images, and 3) a Bayesian uncertainty metric based off applying random dropout to the network.</description>
+    </item>
+    
+  </channel>
+</rss>

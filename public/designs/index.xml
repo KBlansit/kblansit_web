@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Designs on Kevin Blansit</title>
+    <link>/designs/</link>
+    <description>Recent content in Designs on Kevin Blansit</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 02 May 2019 19:47:09 +0200</lastBuildDate>
+    
+	<atom:link href="/designs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Active Learning</title>
+      <link>/designs/active-learning/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/designs/active-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cardiac MRI</title>
+      <link>/designs/cardiac-mri/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/designs/cardiac-mri/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Deep Learning</title>
+      <link>/designs/deep-learning/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/designs/deep-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Generalization</title>
+      <link>/designs/generalization/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/designs/generalization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Health Interoperability</title>
+      <link>/designs/health-interoperability/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/designs/health-interoperability/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Heatmap Localization</title>
+      <link>/designs/heatmap-localization/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/designs/heatmap-localization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Human Interaction</title>
+      <link>/designs/human-interaction/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/designs/human-interaction/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Uncertainty Sampling</title>
+      <link>/designs/uncertainty-sampling/</link>
+      <pubDate>Thu, 02 May 2019 19:47:09 +0200</pubDate>
+      
+      <guid>/designs/uncertainty-sampling/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

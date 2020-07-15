@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang='en'><head>
+  <title>Why Machine Learning Engineers Should Use Decorators - Kevin Blansit</title>
+  <link rel='canonical' href='/post/distributed_training_decorator/' />
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1' />
+  <meta name='description' content='My foray into Keras data distributed training and why we need more decorators' />
+  <meta name='theme-color' content='#FD3519' />
+  
+
+  <meta name="generator" content="Hugo 0.73.0" />
+
+  
+
+
+
+
+
+<link rel="stylesheet" href="/sass/style.min.8a1658d134a4b54730b66789206b2cf14c1b006a6de3f3fde6302f925b6e01f5.css" integrity="sha256-ihZY0TSktUcwtmeJIGss8UwbAGpt4/P95jAvkltuAfU=" media="screen">
+<link rel="stylesheet" href="/syntax.min.css" integrity="" media="screen">
+
+  <meta property="og:title" content="Why Machine Learning Engineers Should Use Decorators" />
+<meta property="og:description" content="My foray into Keras data distributed training and why we need more decorators" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/distributed_training_decorator/" />
+<meta property="article:published_time" content="2019-05-02T19:25:30+02:00" />
+<meta property="article:modified_time" content="2019-05-02T19:25:30+02:00" />
+
+  <meta itemprop="name" content="Why Machine Learning Engineers Should Use Decorators">
+<meta itemprop="description" content="My foray into Keras data distributed training and why we need more decorators">
+<meta itemprop="datePublished" content="2019-05-02T19:25:30&#43;02:00" />
+<meta itemprop="dateModified" content="2019-05-02T19:25:30&#43;02:00" />
+<meta itemprop="wordCount" content="1911">
+
+
+
+<meta itemprop="keywords" content="" />
+</head>
+<body>
+
+  <header style="background-image:linear-gradient(
+      rgba(0,0,0,0.4),rgba(0,0,0,0.4)
+    ),url(&#39;/images/sidebar.jpg&#39;)">
+
+  <div class="intro">
+    <div class="logo-container">
+      <a href="/">
+        <img src='/images/kevin_blansit_headshot_small.jpg' alt="Profile Uncertainty Sampling for Heatmap Localization" class="rounded-logo">
+      </a>
+    </div>
+    <h2>Kevin Blansit</h2>
+    <h3>Expierenced Ph.D. machine learning engineer and data scientist</h3>
+    <div class="menu">
+      
+
+        <p>
+            <a href="/about/">
+                About
+            </a>
+        </p>
+
+        <p>
+            <a href="/resume.pdf">
+                Résumé/CV
+            </a>
+        </p>
+
+        <p>
+            <a href="/portfolio/">
+                Portfolio
+            </a>
+        </p>
+
+        <p>
+            <a href="/post/">
+                Post
+            </a>
+        </p>
+
+      
+        
+        <p>
+            <a href="mailto:kevin%20[d0t]%20blansit%20[at]%20gmail%20[d0t]%20com" target="_blank" rel="external">
+                
+            </a>
+        </p>
+      
+    </div>
+
+  </div>
+
+  <div class="socials">
+      
+  
+    <a href="https://github.com/KBlansit/" class="social-link" target="_blank" rel="noopener" ><div class="icon">
+  <svg width="35px" height="35px" viewBox="0 0 115 115" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+  
+  <path d="M102.679 0H12.32C5.52 0 0 5.519 0 12.321v90.358C0 109.48 5.519 115 12.321 115h90.358c6.802 0 12.321-5.519 12.321-12.321V12.32C115 5.52 109.481 0 102.679 0zM71.182 98.494c-2.156.385-2.952-.95-2.952-2.053 0-1.386.051-8.471.051-14.195 0-4.005-1.335-6.546-2.9-7.881C74.878 73.313 84.89 72.003 84.89 55.6c0-4.671-1.669-7.007-4.39-10.01.436-1.105 1.9-5.648-.436-11.552-3.568-1.104-11.731 4.595-11.731 4.595-3.389-.95-7.06-1.438-10.679-1.438-3.62 0-7.29.488-10.679 1.438 0 0-8.163-5.699-11.73-4.595-2.337 5.878-.899 10.422-.437 11.551-2.72 3.004-4.004 5.34-4.004 10.011 0 16.326 9.574 17.712 19.072 18.765-1.232 1.104-2.336 3.003-2.72 5.724-2.44 1.104-8.677 3.004-12.4-3.568-2.335-4.056-6.545-4.39-6.545-4.39-4.159-.05-.282 2.619-.282 2.619 2.772 1.283 4.723 6.212 4.723 6.212 2.49 7.624 14.4 5.057 14.4 5.057 0 3.568.052 9.37.052 10.422 0 1.104-.77 2.438-2.952 2.053C27.21 92.821 15.35 76.701 15.35 57.86c0-23.564 18.02-41.456 41.585-41.456s42.663 17.892 42.663 41.456c.026 18.842-11.474 34.988-28.416 40.635zM46 82.81c-.488.103-.95-.102-1.001-.436-.051-.385.282-.719.77-.822.488-.05.95.154 1.001.488.077.334-.257.668-.77.77zm-2.439-.23c0 .333-.385.615-.898.615-.565.052-.95-.23-.95-.616 0-.333.385-.616.899-.616.487-.051.95.231.95.616zm-3.516-.283c-.103.334-.616.488-1.053.334-.488-.103-.821-.488-.719-.822.103-.334.617-.488 1.053-.385.513.154.847.54.719.873zm-3.158-1.386c-.23.282-.718.23-1.104-.154-.385-.334-.487-.822-.23-1.053.23-.282.718-.23 1.103.154.334.334.462.847.231 1.053zm-2.336-2.336c-.23.154-.667 0-.95-.385-.282-.385-.282-.822 0-1.001.283-.231.72-.052.95.333.283.385.283.847 0 1.053zm-1.668-2.49c-.231.23-.616.103-.899-.154-.282-.334-.333-.719-.102-.899.23-.23.616-.102.898.154.282.334.334.72.103.899zm-1.72-1.9c-.103.231-.436.283-.719.103-.334-.154-.488-.436-.385-.667.103-.154.385-.231.719-.103.334.18.488.462.385.667z"/>
+  
+  </svg>
+</div>
+</a>
+  
+
+  
+    <a href="https://www.linkedin.com/in/kevin-blansit-b4478049/" class="social-link" target="_blank" rel="noopener" ><div class="icon">
+  <svg width="35px" height="35px" viewBox="0 0 115 115" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+  
+  <path d="M106.786 0H8.189C3.67 0 0 3.722 0 8.291v98.418C0 111.278 3.67 115 8.189 115h98.597c4.518 0 8.214-3.722 8.214-8.291V8.29C115 3.722 111.304 0 106.786 0zm-72.03 98.571H17.713V43.69h17.07V98.57h-.025zm-8.522-62.377c-5.467 0-9.882-4.44-9.882-9.883 0-5.442 4.415-9.882 9.882-9.882 5.442 0 9.883 4.44 9.883 9.882a9.87 9.87 0 0 1-9.883 9.883zm72.414 62.377H81.604V71.875c0-6.366-.129-14.555-8.856-14.555-8.882 0-10.242 6.931-10.242 14.093V98.57H45.46V43.69h16.352v7.495h.23c2.285-4.312 7.855-8.856 16.147-8.856 17.25 0 20.458 11.372 20.458 26.158V98.57z"/>
+  
+  </svg>
+</div>
+</a>
+  
+
+  </div>
+
+</header>
+
+  <div class="content-wrapper">
+    
+      <div class="breadcrumb">
+  
+
+
+
+
+
+<span >
+  <a href="/">HOME</a>
+   / 
+</span>
+
+
+<span >
+  <a href="/post/">POST</a>
+   / 
+</span>
+
+
+<span  class="active">
+  <a href="/post/distributed_training_decorator/">Why Machine Learning Engineers Should Use Decorators</a>
+  
+</span>
+
+</div>
+
+    
+    <main id="content" class="post">
+
+<h1>Why Machine Learning Engineers Should Use Decorators</h1>
+<div class="reading-time">
+  <div class="icon">
+  <svg width="18px" height="18px" viewBox="0 0 115 115" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+  
+  <path d="M57.5 11C29.05 11 6 34.05 6 62.5S29.05 114 57.5 114 109 90.95 109 62.5 85.95 11 57.5 11zm0 93.032c-22.947 0-41.532-18.585-41.532-41.532 0-22.947 18.585-41.532 41.532-41.532 22.947 0 41.532 18.585 41.532 41.532 0 22.947-18.585 41.532-41.532 41.532zm12.833-21.68L52.703 69.54a2.508 2.508 0 0 1-1.018-2.015V33.427a2.5 2.5 0 0 1 2.492-2.492h6.646a2.5 2.5 0 0 1 2.492 2.492v29.426l13.871 10.092c1.122.81 1.35 2.368.54 3.49l-3.904 5.377a2.51 2.51 0 0 1-3.489.54z"/>
+  
+  </svg>
+</div>
+
+  <span>9 minutes</span>
+</div>
+
+<div class="published-date">
+  <div class="icon">
+  <svg width="18px" height="18px" viewBox="0 0 115 115" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+  
+  <path d="M77.577 51.23a1.807 1.807 0 0 0-2.2.342l-27.562 27.79a1.807 1.807 0 0 1-2.2.342l-14.008-9.702a1.807 1.807 0 0 0-2.2.342l-1.952 1.968c-.287.22-.456.568-.455.936.001.37.172.716.46.934L45.637 86.77a1.807 1.807 0 0 0 2.2-.342l31.709-31.97c.287-.22.456-.567.455-.936a1.175 1.175 0 0 0-.46-.933l-1.963-1.36z"/><path d="M97.304 20H80.512c-.041.34-.063.683-.064 1.026a5.986 5.986 0 0 0 1.256 4.1c.054.003.103.02.157.025a4.881 4.881 0 0 1 1.865-.025c3.05.562 4.984 3.907 4.32 7.47-.666 3.563-3.678 5.996-6.728 5.433a4.932 4.932 0 0 1-2.437-1.258c-6.018-1.378-10.445-7.795-10.445-15.745 0-.347.023-.685.04-1.026H34.579c-.041.34-.063.683-.064 1.026a5.986 5.986 0 0 0 1.256 4.1c.054.003.103.02.157.025a4.881 4.881 0 0 1 1.865-.025c3.05.562 4.984 3.907 4.32 7.47-.666 3.563-3.678 5.996-6.728 5.433a4.932 4.932 0 0 1-2.437-1.258c-6.018-1.378-10.445-7.795-10.445-15.745 0-.22.019-.434.025-.652a9.788 9.788 0 0 0-5.697 4.471 9.683 9.683 0 0 0-2.65 4.764L1.158 92.871c-.965 4.689 2.6 8.503 7.948 8.503h6.334v2.673c-.077 5.41 4.263 9.861 9.705 9.953h72.16c5.438-.095 9.774-4.546 9.694-9.953V29.953c.08-5.407-4.256-9.858-9.695-9.953zM10.078 96.653c-2.378 0-3.964-1.697-3.535-3.782L16.637 43.84h80.787L87.331 92.871a5.254 5.254 0 0 1-5.091 3.782H10.078zm91.535 7.394c.036 2.403-1.891 4.382-4.308 4.424h-72.16c-2.42-.04-4.352-2.018-4.32-4.424v-2.673h60.443c5.348 0 10.484-3.814 11.449-8.503l8.897-43.215v54.391z"/><path d="M34.814 33c1.243 0 2.251-1.057 2.251-2.36 0-1.305-1.008-2.362-2.25-2.362-2.04 0-4.313-3.194-4.313-7.778s2.272-7.778 4.312-7.778c1.227 0 2.536 1.163 3.386 3.084H43C41.716 11.19 38.578 8 34.814 8 29.871 8 26 13.49 26 20.5c0 7.009 3.871 12.5 8.814 12.5z"/>
+  
+  </svg>
+</div>
+
+  <span>May 2, 2019</span>
+</div>
+
+<p><strong>Introduction</strong></p>
+<p>I was recently allocated an Azure instance, with 4 K80s for some of my cardiac MRI Autopilot research. This has given me the unique opportunity to experiment with the newer Keras data distributed GPU methods, and think about how to integrate some basic python software engineering best practices into training. In this post, I will first cover how to train with multiple GPUs using distributed data strategy. Then, I will cover how to load a previously trained model, within the same scope (things get tricky here!). Finally, I will show how to clean up the code using decorators, proving more pythonic and extensible code design patterns. Exemplar code snippets and scripts will be linked below.</p>
+<p><strong>Versions</strong></p>
+<p>In this post, I will be using the following libraries and version.</p>
+<ul>
+<li>tensorflow-gpu==1.14.0</li>
+<li>keras==2.3.0</li>
+<li>CUDA==10.0</li>
+<li>NVIDIA-Drivers==450.36.06</li>
+<li>Ubuntu==18.04.4</li>
+</ul>
+<p><strong>Distributed Training with Data Parallelism</strong></p>
+<p>To start out with, let’s make a python script for distributed training with data parallelism. I decided to use the MNIST dataset since it’s opensource, free, lightweight, and allows us to verify everything is working as it should be. I have four primary function here that will form the basis for our work.</p>
+<p><a href="https://github.com/KBlansit/keras_gpu_distributed_example/blob/master/initial_distributed_gpu_training.py">initial_distributed_gpu_training.py</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">load_minst_data</span><span class="p">():</span>
+    <span class="s2">&#34;&#34;&#34; loads mnist data
+</span><span class="s2">    :returns:
+</span><span class="s2">        x_train, y_train, x_test, y_test numpy arrays
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="c1"># the data, split between train and test sets</span>
+    <span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+
+    <span class="c1"># make into data</span>
+    <span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">IMG_ROWS</span><span class="p">,</span> <span class="n">IMG_COLS</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">IMG_ROWS</span><span class="p">,</span> <span class="n">IMG_COLS</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">x_train</span> <span class="o">/=</span> <span class="mi">255</span>
+    <span class="n">x_test</span> <span class="o">/=</span> <span class="mi">255</span>
+
+    <span class="c1"># convert class vectors to binary class matrices</span>
+    <span class="n">y_train</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">NUM_CLASSES</span><span class="p">)</span>
+    <span class="n">y_test</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">NUM_CLASSES</span><span class="p">)</span>
+
+    <span class="c1"># return data</span>
+    <span class="k">return</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span>
+</code></pre></div><p>This function is fairly self-explanatory. I borrowed heavily from the Keras MNIST tutorial. However, I personally like to separate my loading data logic into a function.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">make_datasets</span><span class="p">(</span><span class="n">x_input</span><span class="p">,</span> <span class="n">y_input</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="nb">buffer</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s2">&#34;&#34;&#34; returns tensroflow dataset ready for distributed
+</span><span class="s2">        training
+</span><span class="s2">    :params:
+</span><span class="s2">        x_input: training numpy array
+</span><span class="s2">        y_input: training numpy array
+</span><span class="s2">        batch_size: batch size
+</span><span class="s2">        buffer_size: buffer size
+</span><span class="s2">    :returns:
+</span><span class="s2">        tensorflow dataset
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="c1"># if we don&#39;t have set buffer size, use all x_input size</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">buffer</span><span class="p">:</span> <span class="nb">buffer</span> <span class="o">=</span> <span class="n">x_input</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># return dataset</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span>\
+        <span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">x_input</span><span class="p">,</span> <span class="n">y_input</span><span class="p">))</span><span class="o">.</span>\
+        <span class="n">shuffle</span><span class="p">(</span><span class="nb">buffer</span><span class="p">)</span><span class="o">.</span>\
+        <span class="n">repeat</span><span class="p">()</span><span class="o">.</span>\
+        <span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">drop_remainder</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div><p>This function takes a paired input and labels (X and Y respectively) and make into a tensorflow Dataset class that can be utilized for distributed training. Circa 7-14-2020 on my specified software setup (see details above), the specified methods called from the Dataset class did not work. After a bit of googling, I saw various suggestions of different combinations of methods to use. Certainly other methods may work better for specific circumstances, and this is something I do intend to venture deeper into when I get a moment. But for now, these methods appear to work for me in this toy dataset as well as my much larger network.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">calculate_train_and_valid_steps</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+    <span class="s2">&#34;&#34;&#34; calculates number of steps needed per batch
+</span><span class="s2">    :params:
+</span><span class="s2">        batch_size: batch size
+</span><span class="s2">        buffer_size: buffer size
+</span><span class="s2">    :returns:
+</span><span class="s2">        number of steps
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="c1"># train number of steps</span>
+    <span class="k">if</span> <span class="n">buffer_size</span> <span class="o">%</span> <span class="n">batch_size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">num_of_steps</span> <span class="o">=</span> <span class="n">buffer_size</span> <span class="o">//</span> <span class="n">batch_size</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">num_of_steps</span> <span class="o">=</span> <span class="n">buffer_size</span> <span class="o">//</span> <span class="n">batch_size</span>
+
+    <span class="c1"># find ceiling</span>
+    <span class="n">num_of_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_of_steps</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">num_of_steps</span>
+</code></pre></div><p>Since we don’t know the batch size across the multiple GPUs, we instead just want to iterate over a specified number of steps to ensure we have our proper batch size. I like to think of it similar to when your data is from a data generator, where we need to return our data in batch form.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">cnn_model</span><span class="p">():</span>
+    <span class="s2">&#34;&#34;&#34; loads a simple cnn model
+</span><span class="s2">    :returns:
+</span><span class="s2">        Keras model
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="c1"># define model</span>
+    <span class="c1"># conv layers</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">IMG_SHAPE</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;input&#34;</span><span class="p">)</span>
+    <span class="n">conv_1</span> <span class="o">=</span> <span class="n">Convolution2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">KERNEL_SIZE</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&#34;same&#34;</span><span class="p">,</span>
+        <span class="n">activation</span><span class="o">=</span><span class="s2">&#34;relu&#34;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;conv_1&#34;</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">conv_2</span> <span class="o">=</span> <span class="n">Convolution2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">KERNEL_SIZE</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&#34;same&#34;</span><span class="p">,</span>
+        <span class="n">activation</span><span class="o">=</span><span class="s2">&#34;relu&#34;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;conv_2&#34;</span><span class="p">)(</span><span class="n">conv_1</span><span class="p">)</span>
+    <span class="n">max_pool</span> <span class="o">=</span> <span class="n">MaxPooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&#34;Maxpooling&#34;</span><span class="p">)(</span><span class="n">conv_2</span><span class="p">)</span>
+
+    <span class="c1"># dense and dropout layers</span>
+    <span class="n">drop_1</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;drop_1&#34;</span><span class="p">)(</span><span class="n">max_pool</span><span class="p">)</span>
+    <span class="n">flat</span> <span class="o">=</span> <span class="n">Flatten</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&#34;flat&#34;</span><span class="p">)(</span><span class="n">drop_1</span><span class="p">)</span>
+    <span class="n">dense_1</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;dense_1&#34;</span><span class="p">)(</span><span class="n">flat</span><span class="p">)</span>
+    <span class="n">drop_2</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;drop_2&#34;</span><span class="p">)(</span><span class="n">dense_1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">NUM_CLASSES</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&#34;out&#34;</span><span class="p">)(</span><span class="n">drop_2</span><span class="p">)</span>
+
+    <span class="c1"># define model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+
+    <span class="c1"># compile model</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">categorical_crossentropy</span><span class="p">,</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">SGD</span><span class="p">(</span>
+            <span class="n">lr</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">LEARN_RATE</span><span class="p">),</span>
+            <span class="n">decay</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">DECAY</span><span class="p">),</span>
+            <span class="n">momentum</span><span class="o">=</span><span class="n">MOMENTUM</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="c1"># return model</span>
+    <span class="k">return</span> <span class="n">model</span>
+</code></pre></div><p>Just a very generic and basic Convolutional Neural Network, and just helps make our code organization better. Plus as you will soon come to see, we can use decorators to modify our model function.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># load data</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_minst_data</span><span class="p">()</span>
+
+
+<span class="c1"># make into tensorflow datasets</span>
+<span class="c1"># we can use size of datasets since it&#39;s &lt;2Gbs</span>
+<span class="n">train_buffer_size</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">test_buffer_size</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># make datasets</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">make_datasets</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">make_datasets</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+
+<span class="c1"># calculate number of steps</span>
+<span class="n">train_parallel_steps</span> <span class="o">=</span> <span class="n">calculate_train_and_valid_steps</span><span class="p">(</span>
+        <span class="n">train_buffer_size</span><span class="p">,</span>
+        <span class="n">BATCH_SIZE</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">test_parallel_steps</span> <span class="o">=</span> <span class="n">calculate_train_and_valid_steps</span><span class="p">(</span>
+        <span class="n">test_buffer_size</span><span class="p">,</span>
+        <span class="n">BATCH_SIZE</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># if we&#39;re on the correct VM and are using multi GPUs,</span>
+<span class="c1"># load scope</span>
+<span class="k">if</span> <span class="n">PC</span> <span class="o">==</span> <span class="s2">&#34;AiDA-1&#34;</span> <span class="ow">and</span> <span class="n">USE_MULTI_GPU</span><span class="p">:</span>
+    <span class="c1"># make a learning strategy and open scope for</span>
+    <span class="c1"># compiling model</span>
+    <span class="n">strategy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">MirroredStrategy</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&#34;Number of devices: {}.&#34;</span><span class="o">.</span>\
+        <span class="n">format</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">num_replicas_in_sync</span><span class="p">))</span>
+    <span class="k">with</span> <span class="n">strategy</span><span class="o">.</span><span class="n">scope</span><span class="p">():</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">cnn_model</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">cnn_model</span><span class="p">()</span>
+
+</code></pre></div><p>Now that we have our functions, we can return our data. However, for our model, we need to use the special strategy scope when we compile our data. Prior, we defined above PC to return our machine name (this needs to be changed if you’re not on my VM 😉 ), which may allow more complex behavior if we are moving our model and data training across multiple computers that don’t have multiple GPUs. We additionally have the flag USE_MULTI_GPU to let us quickly turn on and off multi-gpu training.</p>
+<p>Finally, let us fit our model, and save the model as a .h5 file. Great! We can now train a model with multiple GPUs.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># fit model</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+    <span class="n">train_dataset</span><span class="p">,</span>
+    <span class="n">steps_per_epoch</span><span class="o">=</span><span class="n">train_parallel_steps</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span>
+    <span class="n">validation_data</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span>
+    <span class="n">validation_steps</span><span class="o">=</span><span class="n">test_parallel_steps</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div><p><strong>Reloading Keras model into Data Distributed Strategy</strong></p>
+<p>Now let us try to load our prior model in distributed GPU mode. There are many reasons to want to pick up a prior trained Keras model, and resume training.  For one, maybe we want to do transfer learning with a prior trained mode? Or maybe our system had a fault halfway through, and we want to resume training without starting all over again. Heck, we could want to do active learning to enhance our productivity! So, lets ignore for a moment our custom scope logic, and just assume for the moment we can do distributed training.</p>
+<p><a href="https://github.com/KBlansit/keras_gpu_distributed_example/blob/master/bad_load_model.py">bad_load_model.py</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># make a learning strategy and open scope for compiling model</span>
+<span class="n">strategy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">MirroredStrategy</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&#34;Number of devices: {}.&#34;</span><span class="o">.</span>\
+    <span class="n">format</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">num_replicas_in_sync</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">strategy</span><span class="o">.</span><span class="n">scope</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="n">PREV_MODEL_PATH</span><span class="p">)</span>
+</code></pre></div><p><img src="/post/images/distributed_bad_loading_keras_model.png" alt="Drat!"></p>
+<p>😧 Huh??? Um, well that’s awkward! Maybe this sorta makes sense, given that we know that the model must be compiled in the strategy scope. After <em>quite</em> a bit of googling, I couldn’t find a simple answer. 😒</p>
+<p>🤔
+However, we know that a Keras model has the methods get_model_weights() and set_model_weight()!
+What we can do is load the prior model onto our RAM (rather GPU memory), get the model weights as a list of numpy arrays. We can then recompile a fresh model within the correct strategy scope, and simply load the model weights.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># load model with cpu</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;/cpu:0&#39;</span><span class="p">):</span>
+    <span class="c1"># load model</span>
+    <span class="n">prev_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="n">PREV_MODEL_PATH</span><span class="p">)</span>
+    <span class="n">prev_weights</span> <span class="o">=</span> <span class="n">prev_model</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+
+
+<span class="c1"># make a learning strategy and open scope for</span>
+<span class="c1"># compiling model</span>
+<span class="n">strategy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">MirroredStrategy</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&#34;Number of devices: {}.&#34;</span><span class="o">.</span>\
+    <span class="n">format</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">num_replicas_in_sync</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">strategy</span><span class="o">.</span><span class="n">scope</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">cnn_model</span><span class="p">()</span>
+</code></pre></div><p><img src="/post/images/distributed_good_loading_keras_model.png" alt="Drat!"></p>
+<p>This works! 😄</p>
+<p>However, lets be honest. This code is starting to look messy. And what if we want to keep our custom scope depending on what computer we’re on? That logic would start getting ugly. I think this is an excellent use case for decorators.</p>
+<p><strong>Decorators</strong></p>
+<p>What are decorators? They’re just a simple way of encapsulating custom function logic within another function. I won’t go too much into the specifics of decorators here because I think there’s some great other examples that are worth your time.
+<a href="https://realpython.com/primer-on-python-decorators/">Basic Python Decorators.</a>
+<a href="https://www.artima.com/weblogs/viewpost.jsp?thread=240845#decorator-functions-with-decorator-arguments">Decorator Functions with Decorator Arguments.</a>
+<a href="https://ryxcommar.com/2019/07/20/fizzbuzz-redux/">Using Decorators For Fizz Buzz.</a></p>
+<p>I will admit I put off learning more about them due to the scary syntactic sugar, but after learning that they’re just a function returning a function, they are clearly a useful addition to extend reusable code.</p>
+<p><a href="https://github.com/KBlansit/keras_gpu_distributed_example/blob/master/load_model_multi_gpu.py">load_model_multi_gpu.py</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">load_model_with_scope</span><span class="p">(</span><span class="n">model_func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># determine if we use multiple GPUs</span>
+        <span class="k">if</span> <span class="n">PC</span> <span class="o">==</span> <span class="s2">&#34;AiDA-1&#34;</span> <span class="ow">and</span> <span class="n">USE_MULTI_GPU</span><span class="p">:</span>
+            <span class="c1"># print infromation</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;Using multi GPU settings on: {}.&#34;</span><span class="o">.</span>\
+                <span class="n">format</span><span class="p">(</span><span class="n">PC</span><span class="p">))</span>
+
+            <span class="c1"># create a MirroredStrategy and open scope</span>
+            <span class="n">strategy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">MirroredStrategy</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">strategy</span><span class="o">.</span><span class="n">scope</span><span class="p">():</span>
+                <span class="c1"># Everything that creates variables</span>
+                <span class="c1"># should be under the strategy scope</span>
+                <span class="c1"># In general this is only model</span>
+                <span class="c1"># construction &amp; `compile()`</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="n">model_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+                <span class="k">print</span><span class="p">(</span><span class="s2">&#34;Number of devices: {}.&#34;</span><span class="o">.</span>\
+                    <span class="n">format</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">num_replicas_in_sync</span><span class="p">))</span>
+        <span class="c1"># not using multiple GPUs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;Using single GPU settings on: {}.&#34;</span><span class="o">.</span>\
+                <span class="n">format</span><span class="p">(</span><span class="n">PC</span><span class="p">))</span>
+
+            <span class="n">model</span> <span class="o">=</span> <span class="n">model_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div><p>Our first decorator will allow us to decorate our model generating functions inside the proper scope. We have internal logic here that allows us to properly scope an arbitrary model function, as well has providing some output information. Finally, we have a model return argument that allows us to get our model back. All this allows us to “hide” the scope code, allowing us to simply extend our code that gets our convolutional neural network.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">load_model_with_weights</span><span class="p">(</span><span class="n">prev_model_path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">model_func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;/cpu:0&#39;</span><span class="p">):</span>
+                <span class="c1"># load model</span>
+                <span class="n">prev_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="n">prev_model_path</span><span class="p">)</span>
+                <span class="n">prev_weights</span> <span class="o">=</span> <span class="n">prev_model</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+
+                <span class="c1"># clean up so we don&#39;t overallocate space</span>
+                <span class="k">del</span> <span class="n">prev_model</span>
+
+            <span class="c1"># load model and set weights</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">model_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="n">prev_weights</span><span class="p">)</span>
+
+            <span class="c1"># message</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;Set model weights&#34;</span><span class="p">)</span>
+
+            <span class="c1"># return</span>
+            <span class="k">return</span> <span class="n">model</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">wrap</span>
+</code></pre></div><p>For our other decorator, we want to be able to load prior model weights. To do so, we need to pass an argument from the top-level function. The way to do this is to apply simply another function to encapsulate our decorator, allowing us to pass that argument within the proper scope. Like above, we load our model, save the weights, make a new model, set the weights, and then return model. To decorate our model with this logic, we just need an additional call to which we pass our model function argument.</p>
+<p>However, the logic between the two decorators is abstracted from one another. For loading the model within the load_model_with_weights decorator, we are simply running arbitrary function for the process that gets us our model. We can run it with or without the strategy scope defined in load_model_with_scope depending on how we decorate our model function. The important caveat however is that we first decorate the model function code with the strategy scope, THEN decorate with loading previous weights. If we do it the other way around, our load_model would the potentially be inside a strategy scope, causing error.</p>
+<p><strong>Final Thoughts</strong></p>
+<p>I hope this post helps make the case for machine learning engineers to become more familiar with more advanced topics in python programing. Often time, the emphasis of our field is on developing new and exotic model structures. However, there’s a good case to be made that enhancing machine learning productivity can be accomplished with well written code. There’s a certain aesthetic and pride one can get from developing in a world that tries so hard to break design patterns. Not only can we extend logic, we can make code easier to manage, and easier to design experiments.</p>
+<p>I do think there are further things I could do to further modularize my code. I certainly could extend decorator logic to extend my functions returning my datasets, so I can automatically create TensorFlow datasets. That said, I hope my code example provides an interesting perspective in how to plan for reusable code in machine learning engineering.</p>
+
+
+    </main>
+  </div>
+  <footer>
+    <div class="footer-wrapper">
+      <p>Made with ❤️ &mdash; Powered by <a href="https://gohugo.io/" target="_blank" rel="external">Hugo</a> and the <a href="https://github.com/bjacquemet/personal-web" target='_blank' rel="external">Personal Web</a> theme. Icons come from the great <a href="https://fontawesome.com/license" target="_blank" rel="external">Font Awesome</a> library</p>
+      <p></p>
+    </div>
+  </footer>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:500,600|Raleway:400,400i,600" rel="stylesheet">
+  
+</body>
+</html>
+
