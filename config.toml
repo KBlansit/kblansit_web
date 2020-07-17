@@ -11,7 +11,7 @@ pygmentsCodeFences=true
 
 [params.intro]
   main = "Kevin Blansit"
-  sub = "Expierenced Ph.D. machine learning engineer and data scientist"
+  sub = "Experienced Ph.D. machine learning engineer and data scientist"
 
 [params.main]
   latestPublishHeader = "Latest Project"
